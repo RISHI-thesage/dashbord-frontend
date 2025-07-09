@@ -17,7 +17,7 @@ const SessionList = ({ view = 'all', onSessionUpdate, onError }) => {
 
   useEffect(() => {
     fetchSessions();
-  }, [view]);
+  }, [fetchSessions]);
 
   const fetchSessions = async () => {
     try {

@@ -22,7 +22,7 @@ const SessionScheduler = ({ onSessionCreated, onError, students: propStudents, o
     if (!propStudents) {
       fetchStudents();
     }
-  }, [propStudents]);
+  }, [fetchStudents]);
 
   const fetchStudents = async () => {
     try {
