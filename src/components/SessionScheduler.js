@@ -18,12 +18,6 @@ const SessionScheduler = ({ onSessionCreated, onError, students: propStudents, o
   const [localError, setLocalError] = useState(''); // <-- Add local error state
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!propStudents) {
-      fetchStudents();
-    }
-  }, [fetchStudents]);
-
   const fetchStudents = async () => {
     try {
       const userRole = authHelpers.getUserRole();
@@ -38,6 +32,12 @@ const SessionScheduler = ({ onSessionCreated, onError, students: propStudents, o
       if (onError) onError('Failed to fetch students');
     }
   };
+
+  useEffect(() => {
+    if (!propStudents) {
+      fetchStudents();
+    }
+  }, [fetchStudents, propStudents]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

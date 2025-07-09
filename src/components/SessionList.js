@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { sessionAPI } from '../services/api';
 import { authHelpers } from '../services/api';
 
@@ -15,11 +15,7 @@ const SessionList = ({ view = 'all', onSessionUpdate, onError }) => {
 
   const userRole = authHelpers.getUserRole();
 
-  useEffect(() => {
-    fetchSessions();
-  }, [fetchSessions]);
-
-  const fetchSessions = async () => {
+  const fetchSessions = useCallback(async () => {
     try {
       setLoading(true);
       let response;
@@ -49,7 +45,11 @@ const SessionList = ({ view = 'all', onSessionUpdate, onError }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [view, onError]);
+
+  useEffect(() => {
+    fetchSessions();
+  }, [fetchSessions]);
 
   const handleRescheduleRequest = async (e) => {
     e.preventDefault();
