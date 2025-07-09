@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sessionAPI, userAPI, mentorAPI, authHelpers } from '../services/api';
 
@@ -18,7 +18,7 @@ const SessionScheduler = ({ onSessionCreated, onError, students: propStudents, o
   const [localError, setLocalError] = useState(''); // <-- Add local error state
   const navigate = useNavigate();
 
-  const fetchStudents = async () => {
+  const fetchStudents = useCallback(async () => {
     try {
       const userRole = authHelpers.getUserRole();
       if (userRole === 'mentor') {
@@ -31,7 +31,7 @@ const SessionScheduler = ({ onSessionCreated, onError, students: propStudents, o
     } catch (err) {
       if (onError) onError('Failed to fetch students');
     }
-  };
+  }, [onError]);
 
   useEffect(() => {
     if (!propStudents) {
