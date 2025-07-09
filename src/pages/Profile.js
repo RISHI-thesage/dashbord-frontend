@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { userAPI } from '../services/api';
+import { BsCheckCircle, BsPencil, BsSave } from 'react-icons/bs';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
