@@ -1,24 +1,3 @@
-// Basic progress bar component
-const ProgressBar = ({ skillName, percentage, showPercentage = true, color = '#FF6B00' }) => {
-  return (
-    <div className="mb-3">
-      <div className="d-flex justify-content-between mb-1">
-        <small className="fw-medium">{skillName}</small>
-        {showPercentage && <small className="text-muted">{percentage}%</small>}
-      </div>
-      <div className="progress-bar-custom">
-        <div 
-          className="progress-bar-fill" 
-          style={{ 
-            width: `${percentage}%`,
-            backgroundColor: color
-          }}
-        ></div>
-      </div>
-    </div>
-  );
-};
-
 // Dashboard progress tracker (HTML, JS, CSS, Other)
 export const DashboardProgressTracker = ({ progress }) => {
   const progressColors = {

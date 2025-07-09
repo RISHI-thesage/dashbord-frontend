@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { studentAPI } from '../services/api';
 import FileUpload from '../components/FileUpload';
-import { BsWhatsapp, BsClock, BsCalendarEvent, BsLightning, BsPersonBadge } from 'react-icons/bs';
+import { BsClock, BsCalendarEvent, BsLightning, BsPersonBadge } from 'react-icons/bs';
 
 // Helper to get initials from name
 function getInitials(name) {

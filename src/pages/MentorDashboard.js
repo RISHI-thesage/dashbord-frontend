@@ -17,7 +17,6 @@ const MentorDashboard = () => {
   const [students, setStudents] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [showScheduler, setShowScheduler] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showProgressModal, setShowProgressModal] = useState(false);
@@ -67,7 +66,7 @@ const MentorDashboard = () => {
       setSessions(sessionsRes.data.data);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
-      setError('Failed to load dashboard data. Please refresh the page.');
+      // setError('Failed to load dashboard data. Please refresh the page.'); // This line was removed
     } finally {
       setLoading(false);
     }
@@ -76,11 +75,11 @@ const MentorDashboard = () => {
   const handleSessionScheduled = () => {
     setShowScheduler(false);
     fetchDashboardData();
-    setError('');
+    // setError(''); // This line was removed
   };
 
   const handleSessionScheduledError = (errorMessage) => {
-    setError(errorMessage);
+    // setError(errorMessage); // This line was removed
   };
 
   const handleProgressUpdate = async (studentId, progress) => {
@@ -88,10 +87,10 @@ const MentorDashboard = () => {
       await mentorAPI.updateStudentProgress(studentId, progress);
       setShowProgressModal(false);
       fetchDashboardData();
-      setError('');
+      // setError(''); // This line was removed
     } catch (error) {
       console.error('Error updating progress:', error);
-      setError('Failed to update progress. Please try again.');
+      // setError('Failed to update progress. Please try again.'); // This line was removed
     }
   };
 
@@ -99,10 +98,10 @@ const MentorDashboard = () => {
     try {
       await mentorAPI.updateTaskStatus(studentId, taskId, status, feedback);
       fetchStudentTasks(studentId);
-      setError('');
+      // setError(''); // This line was removed
     } catch (error) {
       console.error('Error updating task status:', error);
-      setError('Failed to update task status. Please try again.');
+      // setError('Failed to update task status. Please try again.'); // This line was removed
     }
   };
 
@@ -125,10 +124,10 @@ const MentorDashboard = () => {
     try {
       await mentorAPI.completeSession(sessionId, feedback);
       fetchDashboardData();
-      setError('');
+      // setError(''); // This line was removed
     } catch (error) {
       console.error('Error completing session:', error);
-      setError('Failed to complete session. Please try again.');
+      // setError('Failed to complete session. Please try again.'); // This line was removed
     }
   };
 

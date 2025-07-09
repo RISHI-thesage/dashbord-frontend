@@ -14,7 +14,6 @@ const SessionScheduler = ({ onSessionCreated, onError, students: propStudents, o
     notes: ''
   });
   const [students, setStudents] = useState(propStudents || []);
-  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [localError, setLocalError] = useState(''); // <-- Add local error state
   const navigate = useNavigate();
@@ -26,7 +25,6 @@ const SessionScheduler = ({ onSessionCreated, onError, students: propStudents, o
   }, [propStudents]);
 
   const fetchStudents = async () => {
-    setLoading(true);
     try {
       const userRole = authHelpers.getUserRole();
       if (userRole === 'mentor') {
@@ -38,8 +36,6 @@ const SessionScheduler = ({ onSessionCreated, onError, students: propStudents, o
       }
     } catch (err) {
       if (onError) onError('Failed to fetch students');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -90,11 +86,6 @@ const SessionScheduler = ({ onSessionCreated, onError, students: propStudents, o
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const getStudentName = (studentId) => {
-    const student = students.find(s => s._id === studentId);
-    return student ? student.name : '';
   };
 
   return (

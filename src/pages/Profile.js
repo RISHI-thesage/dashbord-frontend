@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { userAPI, authHelpers } from '../services/api';
-import { motion } from 'framer-motion';
-import { DashboardProgressTracker } from '../components/ProgressBar';
-import { BsPersonCircle, BsCheckCircle, BsPencil, BsSave } from 'react-icons/bs';
+import { userAPI } from '../services/api';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
