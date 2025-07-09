@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Deployment (Vercel/Netlify)
+
+- To deploy on Vercel or Netlify, build the app with `npm run build` and connect your repository.
+- Set the environment variable `REACT_APP_API_BASE_URL` to your backend API URL (e.g., `https://your-backend.onrender.com/api`).
+- For local development, the app defaults to `/api` and you can use a proxy in `package.json` to forward API requests to your backend.
+
 ## Available Scripts
 
 In the project directory, you can run:
