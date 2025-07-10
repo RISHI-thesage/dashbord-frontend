@@ -16,9 +16,11 @@ import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
 // Add import for MyWork page (to be created)
 import MyWork from './pages/MyWork';
+import AdminSubmissions from './pages/AdminSubmissions';
 
 // Helper
 import { authHelpers } from './services/api';
+import { AuthProvider } from './context/AuthContext';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -48,87 +50,97 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Navbar />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<AdminLogin />} />
-          
-          {/* Student Routes */}
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['student']}>
-                <StudentDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/sessions" 
-            element={
-              <ProtectedRoute allowedRoles={['student']}>
-                <SessionList view="all" />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/my-work" 
-            element={
-              <ProtectedRoute allowedRoles={['student']}>
-                <MyWork />
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Mentor Routes */}
-          <Route 
-            path="/mentor" 
-            element={
-              <ProtectedRoute allowedRoles={['mentor']}>
-                <MentorDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Admin Routes */}
-          <Route 
-            path="/admin/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Profile Route - All roles */}
-          <Route 
-            path="/profile" 
-            element={
-              <ProtectedRoute allowedRoles={['student', 'mentor', 'admin']}>
-                <Profile />
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Default redirect */}
-          <Route 
-            path="/" 
-            element={
-              authHelpers.isAuthenticated() ? (
-                <Navigate to={`/${authHelpers.getUserRole() === 'admin' ? 'admin/dashboard' : authHelpers.getUserRole() === 'mentor' ? 'mentor' : 'dashboard'}`} replace />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            } 
-          />
-          
-          {/* Catch all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Navbar />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<AdminLogin />} />
+            
+            {/* Student Routes */}
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <StudentDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/sessions" 
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <SessionList view="all" />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/my-work" 
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <MyWork />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Mentor Routes */}
+            <Route 
+              path="/mentor" 
+              element={
+                <ProtectedRoute allowedRoles={['mentor']}>
+                  <MentorDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Admin Routes */}
+            <Route 
+              path="/admin/dashboard" 
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/submissions" 
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminSubmissions />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Profile Route - All roles */}
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute allowedRoles={['student', 'mentor', 'admin']}>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Default redirect */}
+            <Route 
+              path="/" 
+              element={
+                authHelpers.isAuthenticated() ? (
+                  <Navigate to={`/${authHelpers.getUserRole() === 'admin' ? 'admin/dashboard' : authHelpers.getUserRole() === 'mentor' ? 'mentor' : 'dashboard'}`} replace />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              } 
+            />
+            
+            {/* Catch all */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

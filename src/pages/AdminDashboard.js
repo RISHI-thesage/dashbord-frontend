@@ -31,9 +31,11 @@ const AdminDashboard = () => {
   });
   // Fetch all student tasks for admin view
   const [allStudentTasks, setAllStudentTasks] = useState([]);
+  const [adminSubmissions, setAdminSubmissions] = useState([]);
 
   useEffect(() => {
     fetchDashboardData();
+    fetchAdminSubmissions();
   }, []);
 
   useEffect(() => {
@@ -68,6 +70,15 @@ const AdminDashboard = () => {
       setError('Failed to load dashboard data. Please refresh the page.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAdminSubmissions = async () => {
+    try {
+      const res = await adminAPI.getSubmissions();
+      setAdminSubmissions(res.data.data || []);
+    } catch (err) {
+      setAdminSubmissions([]);
     }
   };
 
@@ -504,7 +515,7 @@ const AdminDashboard = () => {
         {/* All Student Submissions Section */}
         <div className="dashboard-card mb-4 bg-soft-cream" style={{ border: 'none', boxShadow: '0 4px 24px rgba(255,107,0,0.08)', padding: '1.5rem 2rem' }}>
           <h4 className="fw-bold mb-3"><i className="bi bi-file-earmark-arrow-up me-2"></i>All Student Submissions</h4>
-          {allStudentTasks.length === 0 ? (
+          {adminSubmissions.length === 0 ? (
             <div className="text-muted">No submissions yet.</div>
           ) : (
             <div className="table-responsive">
@@ -513,24 +524,32 @@ const AdminDashboard = () => {
                   <tr>
                     <th>Student</th>
                     <th>Mentor</th>
+                    <th>Title</th>
                     <th>File</th>
                     <th>Uploaded</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {allStudentTasks.map(task => (
-                    <tr key={task._id}>
-                      <td>{task.student.name}</td>
-                      <td>{task.mentor ? task.mentor.name : 'Unassigned'}</td>
-                      <td>{task.originalname}</td>
-                      <td>{new Date(task.uploadedAt).toLocaleDateString()}</td>
+                  {adminSubmissions.map(sub => (
+                    <tr key={sub._id}>
+                      <td>{sub.student?.name || 'Unknown'}</td>
+                      <td>{sub.mentor?.name || 'Unassigned'}</td>
+                      <td>{sub.title}</td>
+                      <td>
+                        {sub.cloudinaryUrl ? (
+                          <a href={sub.cloudinaryUrl} target="_blank" rel="noopener noreferrer">{sub.originalName}</a>
+                        ) : (
+                          sub.originalName
+                        )}
+                      </td>
+                      <td>{new Date(sub.submissionDate).toLocaleDateString()}</td>
                       <td>
                         <span className={`badge ${
-                          task.status === 'approved' ? 'bg-success' :
-                          task.status === 'reviewed' ? 'bg-warning' : 'bg-secondary'
+                          sub.status === 'approved' ? 'bg-success' :
+                          sub.status === 'reviewed' ? 'bg-warning' : 'bg-secondary'
                         }`}>
-                          {task.status}
+                          {sub.status}
                         </span>
                       </td>
                     </tr>

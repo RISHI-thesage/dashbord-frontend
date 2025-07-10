@@ -1,40 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { authHelpers } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = ({ onSectionChange }) => {
-  const [userRole, setUserRole] = useState(null);
-  const [userName, setUserName] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const { isAuthenticated, userRole, loading, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkAuth = () => {
-      const authenticated = authHelpers.isAuthenticated();
-      const role = localStorage.getItem('userRole');
-      setIsAuthenticated(authenticated);
-      setUserRole(role);
-      setUserName(role ? `${role.charAt(0).toUpperCase() + role.slice(1)} User` : '');
-      setLoading(false); // Set loading to false after check
-    };
-    checkAuth();
-    // Listen for storage changes (when user logs in/out in another tab)
-    const handleStorageChange = () => checkAuth();
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+  if (loading) return null;
+  if (!isAuthenticated || !userRole) return null;
 
-  if (loading) return null; // Don't render until auth check is complete
-  if (!isAuthenticated || !userRole) return null; // Only show navbar if authenticated
+  const userName = userRole ? `${userRole.charAt(0).toUpperCase() + userRole.slice(1)} User` : '';
 
   const handleLogout = () => {
-    authHelpers.removeAuthToken();
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userId');
-    setIsAuthenticated(false);
-    setUserRole(null);
-    setUserName('');
+    logout();
     navigate('/login');
   };
 
@@ -96,7 +74,6 @@ const Navbar = ({ onSectionChange }) => {
         <Link className="navbar-brand" to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'mentor' ? '/mentor' : '/dashboard'}>
           <img src="/logo.png" alt="IgniteU Logo" height="40" className="me-2" />
         </Link>
-        
         <button 
           className="navbar-toggler" 
           type="button" 
@@ -108,12 +85,10 @@ const Navbar = ({ onSectionChange }) => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto">
             {renderNavLinks()}
           </ul>
-          
           <ul className="navbar-nav">
             <li className="nav-item dropdown">
               <button 

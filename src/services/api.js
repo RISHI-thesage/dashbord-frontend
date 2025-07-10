@@ -151,9 +151,7 @@ export const uploadAPI = {
   },
   
   downloadFile: (filename) => {
-    return api.get(`/upload/${filename}`, {
-      responseType: 'blob',
-    });
+    return api.get(`/upload/${filename}`);
   },
   
   deleteFile: (filename) => {

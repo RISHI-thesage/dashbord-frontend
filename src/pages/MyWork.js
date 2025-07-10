@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { studentAPI } from '../services/api';
+import { getFileIcon, formatFileSize, openFile } from '../utils/fileUtils';
 
 const MyWork = () => {
   const [tasks, setTasks] = useState([]);
@@ -45,22 +46,37 @@ const MyWork = () => {
               <div key={task._id || task.filename} className="col-md-6 col-lg-4 mb-4">
                 <div className="card h-100">
                   <div className="card-body">
-                    <h6 className="card-title mb-2">{task.originalname || task.filename}</h6>
+                    <div className="d-flex align-items-center mb-2">
+                      <i className={`${getFileIcon(task.mimeType, task.originalname)} fs-4 me-2 text-primary`}></i>
+                      <h6 className="card-title mb-0">{task.originalname || task.filename}</h6>
+                    </div>
                     <p className="card-text small text-muted mb-1">
                       <i className="bi bi-calendar me-1"></i>
                       Uploaded: {task.uploadedAt ? new Date(task.uploadedAt).toLocaleDateString() : 'N/A'}
                     </p>
-                    <p className="card-text small mb-1">
+                    {task.fileSize && (
+                      <p className="card-text small text-muted mb-1">
+                        <i className="bi bi-hdd me-1"></i>
+                        Size: {formatFileSize(task.fileSize)}
+                      </p>
+                    )}
+                    <p className="card-text small mb-2">
                       <span className={`badge ${task.status === 'approved' ? 'bg-success' : task.status === 'reviewed' ? 'bg-warning' : 'bg-secondary'}`}>{task.status || 'pending'}</span>
                     </p>
+                    <button
+                      onClick={() => openFile(task.cloudinaryUrl || `/api/upload/${task.filename}`)}
+                      className="btn btn-outline-primary btn-sm me-2"
+                    >
+                      <i className="bi bi-eye me-1"></i>
+                      View
+                    </button>
                     <a
-                      href={`/api/upload/${task.filename}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-outline-primary btn-sm mt-2"
+                      href={task.cloudinaryUrl || `/api/upload/${task.filename}`}
+                      download={task.originalname || task.filename}
+                      className="btn btn-outline-secondary btn-sm"
                     >
                       <i className="bi bi-download me-1"></i>
-                      View / Download
+                      Download
                     </a>
                   </div>
                 </div>
