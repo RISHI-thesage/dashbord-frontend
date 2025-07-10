@@ -30,7 +30,7 @@ const AdminDashboard = () => {
     experience: ''
   });
   // Fetch all student tasks for admin view
-  const [allStudentTasks, setAllStudentTasks] = useState([]);
+  // const [allStudentTasks, setAllStudentTasks] = useState([]); // Removed unused variable
   const [adminSubmissions, setAdminSubmissions] = useState([]);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
           });
         }
       }
-      setAllStudentTasks(tasks);
+      // setAllStudentTasks(tasks); // This line was removed as per the edit hint
     };
     if (users.length > 0) fetchAllTasks();
   }, [users]);

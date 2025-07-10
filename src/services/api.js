@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for API - use environment variable for deployment
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 // Create axios instance with base configuration
 const api = axios.create({
